@@ -1,11 +1,11 @@
 [package]
-authors = ["The RustWasm Developers"]
+authors = ["poma <semenov.roman@mail.ru>"]
 categories = ["wasm"]
-description = "My super awesome Rust, WebAssembly, and Webpack project!"
+description = "Pedersen hash preimage proof demo on bellman"
 license = "Apache-2.0/MIT"
-name = "rust-webpack"
+name = "pedersen-demo"
 readme = "./README.md"
-repository = "https://github.com/rustwasm/rust-webpack-template"
+repository = "https://github.com/poma/wasm-bellman"
 version = "0.1.0"
 edition = "2018"
 
@@ -14,7 +14,8 @@ crate-type = ["cdylib"]
 
 [dependencies]
 cfg-if = "0.1.5"
-wasm-bindgen = "0.2.25"
+wasm-bindgen = "0.2.40"
+rand = "0.4"
 
 # The `console_error_panic_hook` crate provides better debugging of panics by
 # logging them with `console.error`. This is great for development, but requires
@@ -27,15 +28,14 @@ console_error_panic_hook = { version = "0.1.5", optional = true }
 # allocator, however.
 wee_alloc = { version = "0.4.2", optional = true }
 
-[dependencies.web-sys]
-version = "0.3"
-features = [
-  "Document",
-  "Element",
-  "HtmlElement",
-  "Node",
-  "Window",
-]
+web-sys = { version = "0.3", features = ["console"]}
+
+bellman = { git = 'https://github.com/poma/bellman', default-features = false, features = ["wasm"] }
+sapling-crypto = { git = 'https://github.com/poma/sapling-crypto', default-features = false }
 
 [features]
 default = ["console_error_panic_hook"]
+
+[profile.release]
+# Tell `rustc` to optimize for small code size.
+# opt-level = "s"

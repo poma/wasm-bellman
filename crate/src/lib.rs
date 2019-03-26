@@ -1,6 +1,11 @@
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+
+extern crate web_sys;
+use cfg_if::cfg_if;
 use wasm_bindgen::prelude::*;
 
-cfg_if::cfg_if! {
+cfg_if! {
     // When the `console_error_panic_hook` feature is enabled, we can call the
     // `set_panic_hook` function to get better error messages if we ever panic.
     if #[cfg(feature = "console_error_panic_hook")] {
@@ -11,7 +16,7 @@ cfg_if::cfg_if! {
     }
 }
 
-cfg_if::cfg_if! {
+cfg_if! {
     // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
     // allocator.
     if #[cfg(feature = "wee_alloc")] {
@@ -20,20 +25,20 @@ cfg_if::cfg_if! {
     }
 }
 
+macro_rules! log {
+    ($($t:tt)*) => (web_sys::console::log_1(&format_args!($($t)*).to_string().into()))
+}
+
+mod hasher;
+mod bit_iterator;
+mod pedersen;
+
 // Called by our JS entry point to run the example.
 #[wasm_bindgen]
 pub fn run() -> Result<(), JsValue> {
     set_panic_hook();
 
-    let window = web_sys::window().expect("should have a Window");
-    let document = window.document().expect("should have a Document");
-
-    let p: web_sys::Node = document.create_element("p")?.into();
-    p.set_text_content(Some("Hello from Rust, WebAssembly, and Webpack!"));
-
-    let body = document.body().expect("should have a body");
-    let body: &web_sys::Node = body.as_ref();
-    body.append_child(&p)?;
+    pedersen::test_pedersen_proof();
 
     Ok(())
 }
