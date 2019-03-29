@@ -35,7 +35,7 @@ impl <'a, E: JubjubEngine> Circuit<E> for PedersenDemo<'a, E> {
         hash.inputize(cs.namespace(|| "hash input"))?;
 
 
-        let preimage = AllocatedNum::alloc(
+        let mut hash_calculated = AllocatedNum::alloc(
             cs.namespace(|| "preimage"),
             || {
                 let preimage_value = self.preimage;
@@ -43,14 +43,16 @@ impl <'a, E: JubjubEngine> Circuit<E> for PedersenDemo<'a, E> {
             }
         )?;
 
-        let preimage_bits = preimage.into_bits_le(cs.namespace(|| "preimage into bits"))?;
+        for i in 0..5 {
+            let preimage_bits = hash_calculated.into_bits_le(cs.namespace(|| format!("preimage into bits {}", i)))?;
 
-        let hash_calculated = pedersen_hash::pedersen_hash(
-            cs.namespace(|| "hash calculated"),
-            pedersen_hash::Personalization::NoteCommitment,
-            &preimage_bits,
-            self.params
-        )?.get_x().clone();
+            hash_calculated = pedersen_hash::pedersen_hash(
+                cs.namespace(|| format!("hash calculated {}", i)),
+                pedersen_hash::Personalization::NoteCommitment,
+                &preimage_bits,
+                self.params
+            )?.get_x().clone();
+        }
 
 
         cs.enforce(
@@ -71,7 +73,10 @@ pub fn test_pedersen_proof(){
 
     let preimage = rng.gen();
     let hasher = BabyPedersenHasher::default();
-    let hash = hasher.hash(preimage);
+    let mut hash = preimage;
+    for _ in 0..5 {
+        hash = hasher.hash(hash);
+    }
     println!("Preimage: {}", preimage.clone());
     println!("Hash: {}", hash.clone());
 
@@ -106,8 +111,8 @@ pub fn test_pedersen_proof(){
     log!("Creating proofs...");
     let c = PedersenDemo::<Bn256> {
         params: pedersen_params,
-        hash: Some(hash),
-        preimage: Some(preimage)
+        hash: Some(hash.clone()),
+        preimage: Some(preimage.clone())
     };
     web_sys::console::time_with_label("Proof time");
     let proof = create_random_proof(c, &params, rng).unwrap();
