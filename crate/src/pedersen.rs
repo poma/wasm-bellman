@@ -2,15 +2,15 @@
 #![allow(unused_variables)]
 use rand::Rng;
 use crate::hasher::BabyPedersenHasher;
-use bellman::pairing::ff::{Field, PrimeField, PrimeFieldRepr};
-use sapling_crypto::jubjub::{JubjubEngine, JubjubParams};
-use sapling_crypto::circuit::{Assignment, boolean, ecc, pedersen_hash, blake2s, sha256, num, multipack, baby_eddsa, float_point};
-use sapling_crypto::circuit::num::{AllocatedNum, Num};
-use sapling_crypto::alt_babyjubjub::{AltJubjubBn256};
-use bellman::pairing::bn256::{Bn256, Fr};
-use bellman::{Circuit, ConstraintSystem, SynthesisError};
-use bellman::groth16::{Proof, generate_random_parameters, prepare_verifying_key, create_random_proof, verify_proof};
-use sapling_crypto::circuit::test::TestConstraintSystem;
+use bellman_ce::pairing::ff::{Field, PrimeField, PrimeFieldRepr};
+use sapling_crypto_ce::jubjub::{JubjubEngine, JubjubParams};
+use sapling_crypto_ce::circuit::{Assignment, boolean, ecc, pedersen_hash, blake2s, sha256, num, multipack, baby_eddsa, float_point};
+use sapling_crypto_ce::circuit::num::{AllocatedNum, Num};
+use sapling_crypto_ce::alt_babyjubjub::{AltJubjubBn256};
+use bellman_ce::pairing::bn256::{Bn256, Fr};
+use bellman_ce::{Circuit, ConstraintSystem, SynthesisError};
+use bellman_ce::groth16::{Proof, generate_random_parameters, prepare_verifying_key, create_random_proof, verify_proof};
+use sapling_crypto_ce::circuit::test::TestConstraintSystem;
 
 #[derive(Clone)]
 pub struct PedersenDemo<'a, E: JubjubEngine> {

@@ -1,9 +1,9 @@
 // Pedersen hash implementation of the Hasher trait
 
-use bellman::pairing::ff::{Field, PrimeField, PrimeFieldRepr};
-use sapling_crypto::pedersen_hash::{baby_pedersen_hash, Personalization};
-use bellman::pairing::bn256::Bn256;
-use sapling_crypto::alt_babyjubjub::{JubjubEngine, AltJubjubBn256};
+use bellman_ce::pairing::ff::{Field, PrimeField, PrimeFieldRepr};
+use sapling_crypto_ce::pedersen_hash::{baby_pedersen_hash, Personalization};
+use bellman_ce::pairing::bn256::Bn256;
+use sapling_crypto_ce::alt_babyjubjub::{JubjubEngine, AltJubjubBn256};
 use crate::bit_iterator::BitIteratorLe;
 
 pub struct PedersenHasher<E: JubjubEngine> {
