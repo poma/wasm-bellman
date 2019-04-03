@@ -125,4 +125,5 @@ pub fn test_pedersen_proof(){
     ).unwrap();
 
     assert!(result, "Proof is correct");
+    log!("Done");
 }

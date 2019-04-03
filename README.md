@@ -12,3 +12,11 @@ commitment.
   `http://localhost:8080`. It will automatically recompile if you change rust or js code
 
 * `npm run build` -- Bundle the project (in production mode).
+
+# Structure
+
+All the rust code lives under `/crate` dir and compiles the result to `/crate/pkg` as a package.
+
+The main js script for the frontend is `/js/index.js`, the webpage is `/index.html`
+
+The project is managed by webpack, so to adjust the webserver settings edit `/webpack.config.js`
