@@ -114,9 +114,10 @@ pub fn test_pedersen_proof(){
         hash: Some(hash.clone()),
         preimage: Some(preimage.clone())
     };
-    web_sys::console::time_with_label("Proof time");
+    let perf = web_sys::window().unwrap().performance().unwrap();
+    let start = perf.now();
     let proof = create_random_proof(c, &params, rng).unwrap();
-    web_sys::console::time_end_with_label("Proof time");
+    alert!("Proof time: {}ms", perf.now() - start);
 
     let result = verify_proof(
         &pvk,

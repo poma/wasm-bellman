@@ -25,6 +25,15 @@ cfg_if! {
     }
 }
 
+#[wasm_bindgen]
+extern "C" {
+    pub fn alert(s: &str);
+}
+
+macro_rules! alert {
+    ($($t:tt)*) => ($crate::alert(&format_args!($($t)*).to_string()))
+}
+
 macro_rules! log {
     ($($t:tt)*) => (web_sys::console::log_1(&format_args!($($t)*).to_string().into()))
 }
